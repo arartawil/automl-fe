@@ -1,6 +1,6 @@
 # Tests
 
-This directory contains test suites for XAIevo.
+This directory contains test suites for AutoML-FE.
 
 ## Running Tests
 
@@ -12,7 +12,7 @@ pip install pytest pytest-cov
 pytest tests/
 
 # Run with coverage
-pytest tests/ --cov=xaievo --cov-report=html
+pytest tests/ --cov=automl_fe --cov-report=html
 ```
 
 ## Test Structure

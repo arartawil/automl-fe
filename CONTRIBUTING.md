@@ -1,6 +1,6 @@
-# Contributing to XAIevo
+# Contributing to AutoML-FE
 
-Thank you for your interest in contributing to XAIevo! We welcome contributions from the community and are grateful for your help in making this project better.
+Thank you for your interest in contributing to AutoML-FE! We welcome contributions from the community and are grateful for your help in making this project better.
 
 ## Table of Contents
 
@@ -50,7 +50,7 @@ A clear and concise description of what you expected to happen.
 **Environment:**
 - OS: [e.g. Ubuntu 20.04]
 - Python version: [e.g. 3.10.0]
-- XAIevo version: [e.g. 0.1.0]
+- AutoML-FE version: [e.g. 0.1.0]
 
 **Additional context**
 Add any other context about the problem here.
@@ -93,8 +93,8 @@ Add any other context or screenshots about the feature request here.
 1. **Fork the repository** on GitHub
 2. **Clone your fork locally**:
    ```bash
-   git clone https://github.com/your-username/xaievo.git
-   cd xaievo
+   git clone https://github.com/arartawil/automl-fe.git
+   cd automl-fe
    ```
 
 3. **Create a virtual environment**:
@@ -202,7 +202,7 @@ We use [pytest](https://docs.pytest.org/) for testing.
 pytest tests/
 
 # Run with coverage
-pytest tests/ --cov=xaievo --cov-report=html
+pytest tests/ --cov=automl_fe --cov-report=html
 
 # Run specific test file
 pytest tests/test_core.py
@@ -223,7 +223,7 @@ Example test:
 
 ```python
 import pytest
-from xaievo import RunTracker
+from automl_fe import FeatureEngineering
 
 def test_run_tracker_basic_functionality():
     """Test basic RunTracker operations."""
@@ -294,12 +294,12 @@ If you discover a security vulnerability, please report it privately by emailing
 If you have questions about contributing, please:
 
 1. Check the [documentation](docs/)
-2. Search existing [issues](https://github.com/yourusername/xaievo/issues)
-3. Open a [discussion](https://github.com/yourusername/xaievo/discussions)
+2. Search existing [issues](https://github.com/arartawil/automl-fe/issues)
+3. Open a [discussion](https://github.com/arartawil/automl-fe/discussions)
 4. Contact the maintainers
 
 ## Recognition
 
 Contributors will be recognized in our README and release notes. We appreciate all forms of contribution, from code to documentation to bug reports!
 
-Thank you for contributing to XAIevo! 🎉
+Thank you for contributing to AutoML-FE! 🎉

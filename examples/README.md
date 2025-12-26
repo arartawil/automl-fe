@@ -1,6 +1,6 @@
 # Examples
 
-This directory contains example scripts demonstrating XAIevo usage.
+This directory contains example scripts demonstrating AutoML-FE usage.
 
 ## Planned Examples
 

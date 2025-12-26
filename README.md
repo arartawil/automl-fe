@@ -1,240 +1,286 @@
-# XAIevo: Explainable AI for Evolutionary Algorithms
+# AutoML-FE: Automated Machine Learning Feature Engineering
 
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL%203.0-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-**Making evolutionary and metaheuristic algorithms interpretable through comprehensive explainability tools.**
+**Automated Machine Learning Feature Engineering Library**
 
-XAIevo is a general-purpose toolkit for adding explainability, interpretability, and transparency to evolutionary algorithms, metaheuristics, and nature-inspired optimization methods. It provides algorithm-agnostic interfaces for tracking, logging, analyzing, and visualizing the behavior of optimization processes.
+A comprehensive Python library for automated feature engineering with advanced feature selection methods including filter-based, wrapper-based, embedded, and mRMR (Minimum Redundancy Maximum Relevance) approaches.
 
-## ✨ Key Features
+## 🚀 Features
 
-- **🔍 Algorithm-Agnostic**: Works with any evolutionary or metaheuristic algorithm (DE, GA, PSO, CMA-ES, etc.)
-- **📊 Run Tracking**: Comprehensive logging of iterations, fitness, diversity, and custom metrics
-- **🎯 Attribution & Importance**: Compute feature importance and parameter sensitivity
-- **📈 Visualization-Ready**: Export data in formats ready for plotting and analysis
-- **🔌 Easy Integration**: Minimal code changes to add explainability to existing algorithms
-- **💾 Persistence**: Save and reload optimization runs for post-hoc analysis
-- **🎓 Research-Friendly**: Built for reproducibility and scientific investigation
+- **Multiple Selection Methods**: Filter, Wrapper, Embedded, and mRMR algorithms
+- **Smart Preprocessing**: Adaptive encoding, imputation, and scaling
+- **Method Comparison**: Statistical comparison of selection methods with cross-validation
+- **Visualization**: Publication-ready plots for feature analysis
+- **Pipeline Integration**: Compatible with scikit-learn pipelines
+- **Stability Analysis**: Selection stability across cross-validation folds
+- **Task Detection**: Automatic classification/regression task detection
+- **Outlier Handling**: Multiple strategies for outlier detection and treatment
 
-## 🚀 Quick Start
+## 📦 Installation
 
-### Installation
-
+### From Source
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/xaievo.git
-cd xaievo
-
-# Install in development mode
+git clone https://github.com/arartawil/automl-fe.git
+cd automl-fe
 pip install -e .
 ```
 
-### Minimal Example
-
-```python
-import sys
-sys.path.insert(0, 'src')
-
-from xaievo import RunTracker, Explainer
-import random
-
-# Create a tracker for your optimization run
-tracker = RunTracker(
-    run_id="sphere_optimization",
-    config={"population_size": 50, "max_iterations": 100}
-)
-
-# Simulate a simple optimization loop (replace with your algorithm)
-for iteration in range(100):
-    best_fitness = 100.0 * (0.95 ** iteration)  # Simulated improvement
-    diversity = random.uniform(0.1, 1.0)
-    best_solution = [random.uniform(-5, 5) for _ in range(5)]
-    
-    # Log iteration data
-    tracker.log_iteration(
-        iteration=iteration,
-        best_fitness=best_fitness,
-        population_diversity=diversity,
-        best_solution=best_solution
-    )
-
-# Finalize and analyze
-tracker.finalize()
-print(tracker.get_summary())
-
-# Export for further analysis
-tracker.export_json("optimization_run.json")
-
-# Get explanations
-explainer = Explainer(tracker)
-print(explainer.analyze_convergence())
+### Development Installation
+```bash
+git clone https://github.com/arartawil/automl-fe.git
+cd automl-fe
+pip install -r requirements.txt
 ```
 
-### Running the Demo
+## ⚡ Quick Start
+
+```python
+import pandas as pd
+from sklearn.datasets import load_breast_cancer
+from automl_fe import FeatureEngineering
+
+# Load data
+data = load_breast_cancer()
+X = pd.DataFrame(data.data, columns=data.feature_names)
+y = pd.Series(data.target)
+
+# Create and fit feature engineering pipeline
+fe = FeatureEngineering(
+    selection_method='mrmr',
+    n_features=10,
+    preprocessing=True,
+    scaling='standard'
+)
+
+# Transform data
+X_selected = fe.fit_transform(X, y)
+
+# View selected features
+print(f"Selected {len(fe.selected_features_)} features:")
+print(fe.selected_features_)
+
+# Get feature importances
+print(fe.get_feature_importances())
+```
+
+## 📊 Feature Selection Methods
+
+| Method | Type | Description | Best For |
+|--------|------|-------------|----------|
+| `filter` | Filter | Statistical measures (MI, chi2, F-stat) | Fast initial screening |
+| `mrmr` | Filter | Minimum Redundancy Maximum Relevance | Reducing redundancy |
+| `wrapper` | Wrapper | RFE, Forward/Backward selection | Small-medium datasets |
+| `embedded` | Embedded | LASSO, RF, XGBoost importance | Built-in regularization |
+
+### Filter Methods
+```python
+from automl_fe.selection import FilterSelector
+
+selector = FilterSelector(
+    method='mutual_info',  # 'chi2', 'f_statistic', 'variance', 'correlation', 'relief'
+    n_features=10,
+    task='classification'
+)
+X_selected = selector.fit_transform(X, y)
+```
+
+### mRMR Selection
+```python
+from automl_fe.selection import mRMRSelector
+
+selector = mRMRSelector(
+    n_features=10,
+    alpha=1.0  # Trade-off between relevance and redundancy
+)
+X_selected = selector.fit_transform(X, y)
+```
+
+### Wrapper Methods
+```python
+from automl_fe.selection import WrapperSelector
+
+selector = WrapperSelector(
+    method='rfe',  # 'forward', 'backward', 'rfe', 'sequential'
+    n_features=10,
+    estimator=None  # Auto-selected based on task
+)
+X_selected = selector.fit_transform(X, y)
+```
+
+### Embedded Methods
+```python
+from automl_fe.selection import EmbeddedSelector
+
+selector = EmbeddedSelector(
+    method='random_forest',  # 'lasso', 'ridge', 'elasticnet', 'xgboost'
+    n_features=10
+)
+X_selected = selector.fit_transform(X, y)
+```
+
+## 🔍 Advanced Usage
+
+### Automatic Method Recommendation
+```python
+# Let the library choose the best method
+fe = FeatureEngineering(selection_method='auto')
+X_selected = fe.fit_transform(X, y)
+
+# View recommended method
+print(f"Recommended method: {fe.recommended_method_}")
+```
+
+### Method Comparison
+```python
+from automl_fe.evaluation import compare_selection_methods
+
+results = compare_selection_methods(
+    X, y,
+    methods=['filter', 'mrmr', 'wrapper', 'embedded'],
+    n_features=10,
+    cv=5
+)
+
+print(results)
+```
+
+### Feature Engineering with Polynomial Features
+```python
+fe = FeatureEngineering(
+    selection_method='mrmr',
+    n_features=15,
+    polynomial_features=True,
+    polynomial_degree=2
+)
+X_transformed = fe.fit_transform(X, y)
+```
+
+### Pipeline Integration
+```python
+from sklearn.pipeline import Pipeline
+from sklearn.ensemble import RandomForestClassifier
+
+pipeline = Pipeline([
+    ('feature_engineering', FeatureEngineering(
+        selection_method='mrmr',
+        n_features=10,
+        preprocessing=True
+    )),
+    ('classifier', RandomForestClassifier())
+])
+
+pipeline.fit(X, y)
+predictions = pipeline.predict(X_test)
+```
+
+## 📈 Visualization
+
+```python
+from automl_fe import FeatureEngineering
+from automl_fe.visualization import (
+    plot_feature_importance,
+    plot_selection_stability,
+    plot_method_comparison
+)
+
+# Fit feature engineering
+fe = FeatureEngineering(selection_method='mrmr', n_features=10)
+fe.fit(X, y)
+
+# Plot feature importance
+plot_feature_importance(fe, top_n=15)
+
+# Compare methods visually
+from automl_fe.evaluation import compare_selection_methods
+results = compare_selection_methods(X, y)
+plot_method_comparison(results)
+```
+
+## 🛠️ Preprocessing Options
+
+The library provides automatic preprocessing with the following options:
+
+- **Categorical Encoding**: Label encoding, one-hot encoding, target encoding
+- **Missing Value Imputation**: Mean, median, mode, KNN, iterative
+- **Scaling**: Standard, MinMax, Robust, MaxAbs
+- **Outlier Detection**: IQR, Z-score, Isolation Forest
+- **Type Optimization**: Automatic dtype optimization for memory efficiency
+
+```python
+fe = FeatureEngineering(
+    selection_method='mrmr',
+    preprocessing=True,
+    handle_missing=True,
+    scaling='standard',
+    handle_outliers=True
+)
+```
+
+## 📝 Examples
+
+Check out the `examples/` directory for more detailed examples:
+
+- `basic_usage.py` - Simple feature selection examples
+- `advanced_selection.py` - Advanced selection techniques
+- `real_world_example.py` - Complete ML pipeline example
+- `visualization_examples.py` - Visualization examples
+- `user_dataset_example.py` - Using your own dataset
+
+## 🧪 Running Tests
+
+```bash
+# Install dev dependencies
+pip install pytest pytest-cov
+
+# Run all tests
+pytest tests/
+
+# Run with coverage
+pytest tests/ --cov=automl_fe --cov-report=html
+```
+
+## 🧪 Running the Demo
 
 ```bash
 python main.py
 ```
 
-## 📦 Project Structure
-
-```
-xaievo/
-├── src/
-│   └── xaievo/           # Main package
-│       ├── __init__.py   # Package exports
-│       ├── core.py       # Core explainability classes
-│       └── cli.py        # Command-line interface
-├── tests/                # Test suite
-├── docs/                 # Documentation
-├── examples/             # Example scripts
-├── main.py               # Runnable demo
-├── README.md             # This file
-├── LICENSE               # GPL-3.0 license
-├── CODE_OF_CONDUCT.md    # Contributor Covenant
-├── CONTRIBUTING.md       # Contribution guidelines
-└── requirements.txt      # Dependencies
-```
-
-## 🎯 Use Cases
-
-### 1. Understanding Convergence Behavior
-Track how your algorithm's fitness improves over time and identify convergence patterns.
-
-### 2. Feature Importance in Optimization
-Determine which decision variables have the most impact on solution quality.
-
-### 3. Parameter Sensitivity Analysis
-Understand how algorithm hyperparameters affect optimization performance.
-
-### 4. Algorithm Comparison
-Compare different optimization methods using standardized explainability metrics.
-
-### 5. Reproducibility
-Save complete run histories for reproducible research and debugging.
-
-## 🔧 Advanced Usage
-
-### Wrapping Custom Algorithms
-
-```python
-from xaievo import ExplainableOptimizer
-
-def my_optimizer(objective_func, bounds, **kwargs):
-    # Your optimization logic here
-    pass
-
-explainable_opt = ExplainableOptimizer(
-    optimizer_func=my_optimizer,
-    config={"method": "custom_ga", "pop_size": 100},
-    enable_tracking=True
-)
-
-result = explainable_opt.optimize(
-    objective_func=lambda x: sum(xi**2 for xi in x),
-    bounds=[(-10, 10)] * 5
-)
-
-print(result["summary"])
-print(result["explanations"])
-```
-
-### CLI Usage
-
-```bash
-# Run an optimization experiment
-python -m xaievo.cli run --config config.json --output results/
-
-# Analyze saved results
-python -m xaievo.cli analyze results/run_20241226.json --report report.pdf
-```
-
-## 📊 Roadmap
-
-### Version 0.1.0 (Current)
-- ✅ Basic run tracking and logging
-- ✅ Iteration snapshots with metadata
-- ✅ JSON export functionality
-- ✅ Simple convergence analysis
-
-### Version 0.2.0 (Planned)
-- 🔲 Feature importance computation methods
-- 🔲 Population diversity metrics
-- 🔲 Visualization module (convergence plots, heatmaps)
-- 🔲 More analysis tools (stagnation detection, premature convergence)
-
-### Version 0.3.0 (Planned)
-- 🔲 Real-time monitoring dashboard
-- 🔲 Integration with popular libraries (DEAP, PyGMO, Optuna)
-- 🔲 Parameter sensitivity analysis tools
-- 🔲 Comparative analysis across multiple runs
-
-### Version 1.0.0 (Future)
-- 🔲 Comprehensive documentation and tutorials
-- 🔲 Paper submission and citation guidelines
-- 🔲 Benchmarking suite
-- 🔲 Plugin system for custom explainability methods
+This will run demonstrations of:
+- Feature selection on real datasets
+- Comparison of different selection methods  
+- Preprocessing pipeline capabilities
 
 ## 📚 Documentation
 
-Full documentation is coming soon. For now, see:
-
-- **Code**: Well-documented source code in [src/xaievo/](src/xaievo/)
-- **Examples**: Example scripts in [examples/](examples/)
-- **Tests**: Test cases in [tests/](tests/) show usage patterns
+For full documentation, visit the docs/ directory or check out the well-documented source code.
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details on:
-
-- Reporting bugs and requesting features
-- Development setup and workflow
-- Code style and testing requirements
-- Pull request process
-
-By participating, you agree to abide by our [Code of Conduct](CODE_OF_CONDUCT.md).
+Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md) before submitting pull requests.
 
 ## 📄 License
 
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
 
-**TL;DR**: You can use, modify, and distribute this software, but any derivative work must also be open-source under GPL-3.0.
-
-## 📖 How to Cite
-
-If you use XAIevo in your research, please cite:
-
-```bibtex
-@software{xaievo2024,
-  title = {XAIevo: Explainable AI for Evolutionary Algorithms},
-  author = {Your Name},
-  year = {2024},
-  url = {https://github.com/yourusername/xaievo},
-  version = {0.1.0},
-  license = {GPL-3.0}
-}
-```
-
-A research paper is in preparation. Citation will be updated once published.
-
 ## 🙏 Acknowledgments
 
-- Inspired by explainability needs in evolutionary computation research
-- Built with Python's scientific computing stack
-- Thanks to the open-source evolutionary algorithms community
+- Inspired by various AutoML and feature engineering frameworks
+- Built on top of scikit-learn, pandas, and other excellent libraries
+- Thanks to all contributors and users of this library
 
 ## 📧 Contact
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/xaievo/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/xaievo/discussions)
-- **Email**: your.email@example.com
+- **Author**: Your Name
+- **GitHub**: [@arartawil](https://github.com/arartawil)
+- **Issues**: [GitHub Issues](https://github.com/arartawil/automl-fe/issues)
 
 ## ⭐ Star History
 
-If you find this project useful, please consider giving it a star on GitHub!
+If you find this project helpful, please consider giving it a star on GitHub!
 
 ---
 
-**Built for the evolutionary computation and XAI communities** 🧬🤖
+**Made with ❤️ for the ML community**
