@@ -19,6 +19,12 @@ A comprehensive Python library for automated feature engineering with advanced f
 - **Task Detection**: Automatic classification/regression task detection
 - **Outlier Handling**: Multiple strategies for outlier detection and treatment
 
+### 🆕 New in v1.0.1
+- **Data Quality Assessment**: Comprehensive analysis of data quality issues
+- **Enhanced Categorical Encoding**: Target, frequency, and binary encoding methods
+- **Pipeline Export/Import**: Save and load trained pipelines for reproducibility
+- **Automatic Method Selection**: Smart selection of encoding strategies
+
 ## 📦 Installation
 
 ### From Source
