@@ -25,9 +25,9 @@ AutoML-FE is an open-source Python toolkit for automated feature engineering and
 
 # Statement of need
 
-Feature selection remains a fundamental challenge in modern machine learning that directly impacts model performance, interpretability, and computational efficiency [@Li2023]. Current tools face significant limitations: existing implementations either provide individual algorithms without comparison frameworks (scikit-learn) [@Pedregosa2011] or offer complete automation at the expense of transparency and control (AutoGluon [@Erickson2020], H2O.ai). The research community particularly lacks tools for systematic comparison of feature selection methods on contemporary high-dimensional datasets.
+Feature selection remains a fundamental challenge in modern machine learning that directly impacts model performance, interpretability, and computational efficiency [@Singh2023]. Current tools face significant limitations: existing implementations either provide individual algorithms without comparison frameworks (scikit-learn) [@Pedregosa2011] or offer complete automation at the expense of transparency and control (AutoGluon [@Erickson2020], H2O.ai). The research community particularly lacks tools for systematic comparison of feature selection methods on contemporary high-dimensional datasets.
 
-Recent surveys indicate substantial performance variations across feature selection algorithms depending on dataset characteristics [@Huan2023], but reproducing these comparisons requires significant implementation effort. This implementation gap is especially pronounced for newer algorithms like mRMR and hybrid approaches that combine multiple selection paradigms [@Rajendran2022]. Practitioners often resort to simple baseline methods due to implementation barriers, limiting both research progress and practical applications.
+Recent surveys indicate substantial performance variations across feature selection algorithms depending on dataset characteristics [@Huan2023], but reproducing these comparisons requires significant implementation effort. This implementation gap is especially pronounced for newer algorithms like mRMR and hybrid approaches that combine multiple selection paradigms. Practitioners often resort to simple baseline methods due to implementation barriers, limiting both research progress and practical applications.
 
 AutoML-FE addresses these challenges by providing: (1) unified implementation of 12+ feature selection algorithms with consistent interfaces, (2) built-in comparative evaluation framework with statistical validation, (3) standardized benchmarking protocols for reproducible research, and (4) intelligent preprocessing that adapts to modern data characteristics including high-cardinality categorical features and complex missing data patterns [@Singh2023].
 
@@ -83,7 +83,7 @@ The evaluation framework employs stratified cross-validation with multiple perfo
 
 # Applications and scope
 
-AutoML-FE enables several critical research and practical applications. Algorithm developers can benchmark new feature selection methods against established baselines using standardized evaluation protocols. Domain researchers can systematically identify optimal feature selection approaches for specific data characteristics, particularly valuable in bioinformatics, finance, and IoT applications where feature characteristics vary significantly [@Kumar2021].
+AutoML-FE enables several critical research and practical applications. Algorithm developers can benchmark new feature selection methods against established baselines using standardized evaluation protocols. Domain researchers can systematically identify optimal feature selection approaches for specific data characteristics, particularly valuable in bioinformatics, finance, and IoT applications where feature characteristics vary significantly.
 
 The toolkit supports comparative studies enabling meta-analysis of algorithm performance patterns across diverse datasets. Educational applications include comprehensive feature selection tutorials with real datasets and clear algorithm implementations. Production applications benefit from automated preprocessing with transparent decision logging and integration with existing ML pipelines.
 
@@ -91,7 +91,7 @@ Recent applications include optimization algorithm benchmarking in academic rese
 
 # Comparison with existing tools
 
-AutoML-FE occupies a unique position in the feature engineering ecosystem. Compared to scikit-learn, it provides higher-level automation with intelligent defaults while maintaining algorithmic transparency. Unlike comprehensive AutoML platforms (AutoGluon, FLAML), it focuses specifically on feature engineering with deep algorithm coverage rather than end-to-end automation. The integrated comparison framework distinguishes it from standalone implementations by enabling systematic evaluation without substantial custom development [@Chen2022].
+AutoML-FE occupies a unique position in the feature engineering ecosystem. Compared to scikit-learn, it provides higher-level automation with intelligent defaults while maintaining algorithmic transparency. Unlike comprehensive AutoML platforms (AutoGluon, FLAML), it focuses specifically on feature engineering with deep algorithm coverage rather than end-to-end automation. The integrated comparison framework distinguishes it from standalone implementations by enabling systematic evaluation without substantial custom development.
 
 Table 1 summarizes key differences with commonly used alternatives:
 
